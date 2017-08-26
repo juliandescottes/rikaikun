@@ -3,7 +3,7 @@
 	Rikaikun
 	Copyright (C) 2010 Erek Speed
 	http://code.google.com/p/rikaikun/
-	
+
 	---
 
 	Originally based on Rikaichan 1.07
@@ -57,6 +57,7 @@ rcxDict.prototype = {
 	fileRead: function(url, charset) {
 		var req = new XMLHttpRequest();
 		req.open("GET", url, false);
+		req.overrideMimeType('text/plain; charset=utf8');
 		req.send(null);
 		return req.responseText;
 	},
@@ -106,7 +107,7 @@ rcxDict.prototype = {
 		this.wordDict = this.fileRead(chrome.extension.getURL("data/dict.dat"));
 		this.wordIndex = this.fileRead(chrome.extension.getURL("data/dict.idx"));
 		this.kanjiData = this.fileRead(chrome.extension.getURL("data/kanji.dat"), 'UTF-8');
-		this.radData = this.fileReadArray(chrome.extension.getURL("data/radicals.dat"), 'UTF-8'); 
+		this.radData = this.fileReadArray(chrome.extension.getURL("data/radicals.dat"), 'UTF-8');
 
 		//	this.test_kanji();
 	},
@@ -709,7 +710,7 @@ if (0) {
 			for (i = 0; i < entry.data.length; ++i) {
 				e = entry.data[i][0].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
 				if (!e) continue;
-				
+
 				// the next two lines re-process the entries that contain separate search key and spelling due to mixed hiragana/katakana spelling
 				e3 = e[3].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/(.+)\//);
 				if (e3) e = e3;

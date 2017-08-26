@@ -1,6 +1,6 @@
 
 chrome.browserAction.onClicked.addListener(rcxMain.inlineToggle);
-chrome.tabs.onSelectionChanged.addListener(rcxMain.onTabSelect);
+chrome.tabs.onActivated.addListener(rcxMain.onTabSelect);
 chrome.runtime.onMessage.addListener(
 	function(request, sender, response) {
 		switch(request.type) {
@@ -47,15 +47,15 @@ chrome.runtime.onMessage.addListener(
 				console.log(request);
 		}
 	});
-	
+
 if(initStorage("v0.8.92", true)) {
 	// v0.7
 	initStorage("popupcolor", "blue");
 	initStorage("highlight", true);
-	
+
 	// v0.8
 	// No changes to options
-	
+
 	// V0.8.5
 	initStorage("textboxhl", false);
 
@@ -90,15 +90,15 @@ if(initStorage("v0.8.92", true)) {
 	initStorage("showOnKey", "");
 }
 
-/** 
-* Initializes the localStorage for the given key. 
-* If the given key is already initialized, nothing happens. 
-* 
+/**
+* Initializes the localStorage for the given key.
+* If the given key is already initialized, nothing happens.
+*
 * @author Teo (GD API Guru)
-* @param key The key for which to initialize 
-* @param initialValue Initial value of localStorage on the given key 
-* @return true if a value is assigned or false if nothing happens 
-*/ 
+* @param key The key for which to initialize
+* @param initialValue Initial value of localStorage on the given key
+* @return true if a value is assigned or false if nothing happens
+*/
 function initStorage(key, initialValue) {
   var currentValue = localStorage[key];
   if (!currentValue) {

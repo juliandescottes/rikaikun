@@ -3,7 +3,7 @@
 	Rikaikun
 	Copyright (C) 2010 Erek Speed
 	http://code.google.com/p/rikaikun/
-	
+
 	---
 
 	Originally based on Rikaichan 1.07
@@ -222,7 +222,12 @@ var rcxMain = {
 	_onTabSelect: function(tabId) {
 
 		if ((this.enabled == 1))
-			chrome.tabs.sendMessage(tabId, {"type":"enable", "config":rcxMain.config});
+			if (tabId && typeof tabId.tabId === "number") {
+				tabId = tabId.tabId
+			}
+			if (typeof tabId !== "undefined") {
+				chrome.tabs.sendMessage(tabId, {"type":"enable", "config":rcxMain.config});
+			}
 	},
 
 	savePrep: function(clip, entry) {
@@ -299,7 +304,7 @@ var rcxMain = {
 		'<tr><td>M</td><td>Next character</td></tr>' +
 		'<tr><td>N</td><td>Next word</td></tr>' +
 		'</table>',
-		
+
 /* 			'<tr><td>C</td><td>Copy to clipboard</td></tr>' +
 		'<tr><td>S</td><td>Save to file</td></tr>' + */
 
@@ -311,32 +316,32 @@ var rcxMain = {
 			if (!this.loadDictionary()) return;
 			//	time = (((new Date()).getTime() - time) / 1000).toFixed(2);
 		}
-		
+
 		// Send message to current tab to add listeners and create stuff
 		chrome.tabs.sendMessage(tab.id, {"type":"enable", "config":rcxMain.config});
 		this.enabled = 1;
-		
+
 		if (mode == 1) {
 			if (rcxMain.config.minihelp == 'true')
 				chrome.tabs.sendMessage(tab.id, {"type":"showPopup", "text":rcxMain.miniHelp});
 			else
 				chrome.tabs.sendMessage(tab.id, {"type":"showPopup", "text":'Rikaikun enabled!'});
-		} 
+		}
 		chrome.browserAction.setBadgeBackgroundColor({"color":[255,0,0,255]});
 		chrome.browserAction.setBadgeText({"text":"On"});
 	},
 
-	// This function diables 
+	// This function diables
 	inlineDisable: function(tab, mode) {
 		// Delete dictionary object after we implement it
 		delete this.dict;
-		
+
 		this.enabled = 0;
 		chrome.browserAction.setBadgeBackgroundColor({"color":[0,0,0,0]});
 		chrome.browserAction.setBadgeText({"text":""});
 
 		// Send a disable message to all browsers
-		var windows = chrome.windows.getAll({"populate":true}, 
+		var windows = chrome.windows.getAll({"populate":true},
 			function(windows) {
 				for (var i =0; i < windows.length; ++i) {
 					var tabs = windows[i].tabs;
@@ -351,7 +356,7 @@ var rcxMain = {
 		if (rcxMain.enabled) rcxMain.inlineDisable(tab, 1);
 			else rcxMain.inlineEnable(tab, 1);
 	},
-	
+
 	kanjiN: 1,
 	namesN: 2,
 
@@ -364,7 +369,7 @@ var rcxMain = {
 	resetDict: function() {
 		this.showMode = 0;
 	},
-	
+
 	sameDict: '0',
 	forceKanji: '1',
 	defaultDict: '2',
@@ -384,7 +389,7 @@ var rcxMain = {
 			this.showMode = (this.showMode + 1) % this.dictCount;
 			break;
 		}
-		
+
 		var m = this.showMode;
 		var e = null;
 
@@ -403,11 +408,11 @@ var rcxMain = {
 			if (e) break;
 			this.showMode = (this.showMode + 1) % this.dictCount;
 		} while (this.showMode != m);
-		
+
 		return e;
 	}
-	
-	
+
+
 
 };
 
